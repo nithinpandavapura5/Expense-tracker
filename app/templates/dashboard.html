@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Dashboard</h1>
+<h4 class="text-muted">Overview for {{ current_month_name }} {{ current_year }}</h4>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-header">Total Spending (This Month)</div>
+            <div class="card-body">
+                <h5 class="card-title">${{ "%.2f"|format(total_spending) }}</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-header">Total Budget (This Month)</div>
+            <div class="card-body">
+                <h5 class="card-title">${{ "%.2f"|format(total_budget) }}</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-{{ 'danger' if total_spending > total_budget else 'info' }} mb-3">
+            <div class="card-header">Remaining Budget</div>
+            <div class="card-body">
+                <h5 class="card-title">${{ "%.2f"|format(total_budget - total_spending) }}</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2>Budget vs Spending by Category</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th>Budget</th>
+            <th>Spending</th>
+            <th>Remaining</th>
+            <th>% Used</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in budget_vs_spending %}
+        <tr class="{{ 'table-danger' if item.alert else ('table-warning' if item.warning else '') }}">
+            <td>{{ item.category }}</td>
+            <td>${{ "%.2f"|format(item.budget) }}</td>
+            <td>${{ "%.2f"|format(item.spending) }}</td>
+            <td>${{ "%.2f"|format(item.remaining) }}</td>
+            <td>
+                {% if item.budget > 0 %}
+                {{ "%.1f"|format(item.percent_used) }}%
+                {% else %}
+                N/A
+                {% endif %}
+            </td>
+            <td>
+                {% if item.alert %}
+                <span class="badge badge-danger">Over Budget!</span>
+                {% elif item.warning %}
+                <span class="badge badge-warning">90% Used</span>
+                {% elif item.budget > 0 %}
+                <span class="badge badge-success">OK</span>
+                {% else %}
+                <span class="badge badge-secondary">No Budget Set</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="alert alert-info mt-4">
+    <strong>Tip:</strong> Set budgets for each category to track your spending and get alerts when you're running low!
+</div>
+{% endblock %}

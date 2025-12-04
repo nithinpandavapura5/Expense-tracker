@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Reports</h1>
+<p class="lead">Download your expense and budget data for analysis</p>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-chart-bar"></i> Budget vs Spending Report</h5>
+                <p class="card-text">Download a detailed comparison of your budgets and spending by category for the
+                    current month.</p>
+                <ul class="list-unstyled">
+                    <li><strong>Month:</strong> {{ current_month }}/{{ current_year }}</li>
+                    <li><strong>Total Budget:</strong> ${{ "%.2f"|format(monthly_budget) }}</li>
+                    <li><strong>Total Spending:</strong> ${{ "%.2f"|format(monthly_spending) }}</li>
+                </ul>
+                <a href="{{ url_for('main.download_budget_spending') }}" class="btn btn-primary">
+                    <i class="fas fa-download"></i> Download Budget Report (CSV)
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-receipt"></i> All Expenses Report</h5>
+                <p class="card-text">Download a complete list of all your expenses across all time periods.</p>
+                <ul class="list-unstyled">
+                    <li><strong>Total Expenses:</strong> {{ total_expenses }}</li>
+                    <li><strong>Format:</strong> CSV (Excel Compatible)</li>
+                </ul>
+                <a href="{{ url_for('main.download_expenses') }}" class="btn btn-success">
+                    <i class="fas fa-download"></i> Download All Expenses (CSV)
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="alert alert-info mt-4">
+    <h5><i class="fas fa-info-circle"></i> How to use downloaded reports:</h5>
+    <ul class="mb-0">
+        <li>Open CSV files with Microsoft Excel, Google Sheets, or any spreadsheet software</li>
+        <li>Use the data to create custom charts and analyze your spending patterns</li>
+        <li>Keep monthly backups of your budget reports for long-term tracking</li>
+    </ul>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header">
+        <h5>Quick Stats</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="text-center">
+                    <h3 class="text-primary">{{ total_expenses }}</h3>
+                    <p class="text-muted">Total Expenses Recorded</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <h3 class="text-success">{{ total_budgets }}</h3>
+                    <p class="text-muted">Budgets Set</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <h3 class="text-info">${{ "%.2f"|format(monthly_spending) }}</h3>
+                    <p class="text-muted">This Month's Spending</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <h3 class="text-warning">${{ "%.2f"|format(monthly_budget) }}</h3>
+                    <p class="text-muted">This Month's Budget</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

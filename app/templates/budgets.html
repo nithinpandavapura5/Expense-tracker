@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Budgets</h1>
+<div class="content-section">
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Set Budget</legend>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    {{ form.amount.label(class="form-control-label") }}
+                    {{ form.amount(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group col-md-6">
+                    {{ form.category.label(class="form-control-label") }}
+                    {{ form.category(class="form-control form-control-lg") }}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    {{ form.month.label(class="form-control-label") }}
+                    {{ form.month(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group col-md-6">
+                    {{ form.year.label(class="form-control-label") }}
+                    {{ form.year(class="form-control form-control-lg") }}
+                </div>
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div>
+
+<h2>Current Budgets</h2>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th>Month/Year</th>
+            <th>Amount</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for budget in budgets %}
+        <tr>
+            <td>{{ budget.category.name }}</td>
+            <td>{{ budget.month }}/{{ budget.year }}</td>
+            <td>${{ "%.2f"|format(budget.amount) }}</td>
+            <td>
+                <a href="{{ url_for('main.delete_budget', budget_id=budget.id) }}" class="btn btn-sm btn-danger"
+                    onclick="return confirm('Are you sure you want to delete this budget?')">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
